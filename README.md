@@ -398,26 +398,3 @@ sudo rm -rf $HOME/aligned_layer_tendermint
 
 
 
-### Delete node
-```
-cd $HOME
-sudo systemctl stop alignedlayerd
-sudo systemctl disable alignedlayerd
-sudo rm /etc/systemd/system/alignedlayerd.service
-sudo systemctl daemon-reload
-sudo rm -f /usr/local/bin/alignedlayerd
-sudo rm -f $(which alignedlayerd)
-sudo rm -rf $HOME/.alignedlayer
-sudo rm -rf $HOME/aligned_layer_tendermint
-```
-
-
-
-
-
-
-
-
-
-
-
