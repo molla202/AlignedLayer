@@ -122,6 +122,17 @@ sed -i -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.
 sed -i -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:24217\"%; s%^address = \":8080\"%address = \":24280\"%; s%^address = \"localhost:9090\"%address = \"0.0.0.0:24290\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:24291\"%; s%:8545%:24245%; s%:8546%:24246%; s%:6065%:24265%" $HOME/.alignedlayer/config/app.toml
 ```
 
+YADA manuel port belirlicem derseniz.ç altaki 16 sayısını değiştiredebilirsiniz.yukardakini yaaprsanız bunu yapmıyorsunuz.
+```
+port=16
+echo "export $port" >> $HOME/.bash_profile
+alignedlayerd config set config rpc.laddr "tcp://0.0.0.0:${port}657" --skip-validate
+sed -i.bak -e "s%:1317%:${port}317%g; s%:8080%:${port}080%g; s%:9090%:${port}090%g; s%:9091%:${port}091%g; s%:8545%:${port}545%g; s%:8546%:${port}546%g; s%:6065%:${port}065%g" $HOME/.alignedlayer/config/app.toml
+sed -i.bak -e "s%:26658%:${port}658%g; s%:26657%:${port}657%g; s%:6060%:${port}060%g; s%:26656%:${port}656%g; s%:26660%:${port}660%g" $HOME/.alignedlayer/config/config.toml
+sed -i.bak -e "s%:26657%:${port}657%g" $HOME/.alignedlayer/config/client.toml
+sudo systemctl daemon-reload
+sudo systemctl restart alignedlayerd && sudo journalctl -u alignedlayerd -f --no-hostname -o cat
+```
 ### Başlatalım
 ```
 cd $HOME
@@ -172,7 +183,18 @@ alignedlayerd tx staking create-validator $HOME/validator.json \
 ```
 
 
-
+### Delete node
+```
+cd $HOME
+sudo systemctl stop alignedlayerd
+sudo systemctl disable alignedlayerd
+sudo rm /etc/systemd/system/alignedlayerd.service
+sudo systemctl daemon-reload
+sudo rm -f /usr/local/bin/alignedlayerd
+sudo rm -f $(which alignedlayerd)
+sudo rm -rf $HOME/.alignedlayer
+sudo rm -rf $HOME/aligned_layer_tendermint
+```
 
 
 
