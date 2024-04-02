@@ -116,6 +116,12 @@ LimitNOFILE=65535
 WantedBy=multi-user.target
 EOF
 ```
+### Port değiştirmek isteyenler (24)
+```
+sed -i -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:24258\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:24257\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:24260\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:24256\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":24266\"%" $HOME/.alignedlayer/config/config.toml
+sed -i -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:24217\"%; s%^address = \":8080\"%address = \":24280\"%; s%^address = \"localhost:9090\"%address = \"0.0.0.0:24290\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:24291\"%; s%:8545%:24245%; s%:8546%:24246%; s%:6065%:24265%" $HOME/.alignedlayer/config/app.toml
+```
+
 ### Başlatalım
 ```
 cd $HOME
@@ -128,8 +134,42 @@ sudo journalctl -u alignedlayerd -f --no-hostname -o cat
 ```
 
 
+### Cüzdan olusturalım
+```
+alignedlayerd keys add züdan-adi
+```
+### Validator
+```
+cd $HOME
+nano $HOME/validator.json
+```
+NOT: alttaki kodu yazıp duzenlıyeceğiz.pubkeyi öğrenmek için.  
+```
+alignedlayerd tendermint show-validator
+```
 
-
+* alttaki örnektir.
+```
+{    
+    "pubkey": {"@type":"/cosmos.crypto.ed25519.PubKey","key":"lR1d7YBVK5jYijOfWVKRFoWCsS4dg3kagT7LB9GnG8I="},
+    "amount": "1000000stake",
+    "moniker": "your-node-moniker",
+    "identity": "eqlab testnet validator",
+    "website": "optional website for your validator",
+    "security": "optional security contact for your validator",
+    "details": "optional details for your validator",
+    "commission-rate": "0.1",
+    "commission-max-rate": "0.2",
+    "commission-max-change-rate": "0.01",
+    "min-self-delegation": "1"
+}
+```
+* Faucet almak için https://faucet.alignedlayer.com/
+```
+alignedlayerd tx staking create-validator $HOME/validator.json \
+--from wallet --chain-id alignedlayer \
+--fees 50stake
+```
 
 
 
