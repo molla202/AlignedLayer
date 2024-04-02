@@ -136,7 +136,7 @@ sudo journalctl -u alignedlayerd -f --no-hostname -o cat
 
 ### Cüzdan olusturalım
 ```
-alignedlayerd keys add züdan-adi
+alignedlayerd keys add cüzdan-adi
 ```
 ### Validator
 ```
